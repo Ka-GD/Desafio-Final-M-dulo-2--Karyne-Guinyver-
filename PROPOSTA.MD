@@ -1,5 +1,6 @@
-# Plano de Segurança - LojaZeta
 
+```markdown
+# Plano de Segurança - LojaZeta
 
 ## 1. Sumário Executivo
 A LojaZeta, e-commerce em crescimento, enfrenta riscos como SQLi, XSS e brute-force em /login.  
