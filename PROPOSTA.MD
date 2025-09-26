@@ -1,18 +1,6 @@
 # 📌 Plano de Segurança - LojaZeta
 
-Este documento apresenta o plano de segurança da LojaZeta, focado em reduzir riscos críticos, implementar defesa em camadas, centralizar monitoramento e estruturar resposta a incidentes conforme o NIST.
-
----
-
-## 📑 Índice
-1. [Sumário Executivo](#1-sumário-executivo)  
-2. [Escopo e Metodologia](#2-escopo-e-metodologia)  
-3. [Arquitetura de Defesa](#3-arquitetura-de-defesa)  
-4. [Monitoramento & SIEM](#4-monitoramento--siem)  
-5. [Resposta a Incidentes](#5-resposta-a-incidentes)  
-6. [Recomendações (80/20)](#6-recomendações-8020)  
-7. [Riscos, Custos e Assunções](#7-riscos-custos-e-assunções)  
-8. [Conclusão](#8-conclusão)  
+Este documento descreve o plano de segurança da LojaZeta, visando reduzir riscos críticos, implementar defesa em camadas, centralizar monitoramento e estruturar resposta a incidentes seguindo o NIST.
 
 ---
 
@@ -33,18 +21,34 @@ Equipe enxuta (2 devs + 1 ops) exige estratégia simples, escalável e de baixo 
 ---
 
 ## 3. Arquitetura de Defesa
-- **Perímetro:** WAF + rate limit em `/login` + CAPTCHA.  
-- **Rede:** banco em subnet privada + ACL mínima + bastion host com MFA.  
-- **Host:** hardening (CIS), patches automáticos, Fail2ban.  
-- **Aplicação:** sanitização inputs, ORM seguro, painel admin com MFA.  
-- **Dados:** TLS, criptografia em disco/db, backups criptografados e testados.  
-- **Identidade:** gestão de segredos (Vault/Secret Manager), menor privilégio.  
+
+A arquitetura de defesa segue três pilares: **Perímetro, Rede e Aplicação**, integrados a monitoramento contínuo e gestão de identidade.
 
 ```mermaid
-flowchart LR
-  Internet --> WAF[WAF/CRS]
-  WAF --> LB[Load Balancer]
-  LB --> APP[App Node.js]
-  APP --> DB[(PostgreSQL)]
-  SIEM[Coleta/Correlação] -->|Logs| APP & DB
-  IAM[Gestão de Identidade] --> APP
+flowchart TD
+    Internet([Internet])
+    WAF[WAF/CRS<br/>Proteção Perímetro]
+    LB[Load Balancer<br/>Distribuição de tráfego]
+    APP[App Node.js<br/>Lógica da Aplicação]
+    DB[(PostgreSQL<br/>Banco de Dados)]
+    LOGS[Logs Centralizados<br/>Loki + Grafana]
+    IAM[Gestão de Identidade<br/>Vault / Secret Manager]
+
+    Internet --> WAF
+    WAF --> LB
+    LB --> APP
+    APP --> DB
+    APP --> LOGS
+    DB --> LOGS
+    IAM --> APP
+
+    classDef perimeter fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef core fill:#9f9,stroke:#333,stroke-width:2px;
+    classDef monitoring fill:#ff9,stroke:#333,stroke-width:2px;
+
+    class WAF perimeter;
+    class LB perimeter;
+    class APP core;
+    class DB core;
+    class LOGS monitoring;
+    class IAM perimeter;
