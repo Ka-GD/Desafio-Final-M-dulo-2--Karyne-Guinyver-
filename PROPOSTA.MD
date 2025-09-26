@@ -49,3 +49,66 @@ flowchart TD
     class WAF,LB,IAM perimeter;
     class APP,DB core;
     class LOGS monitoring;
+---
+
+## 4. Monitoramento & SIEM
+
+A solução monitora todo o stack para detectar incidentes em tempo real.
+
+Logs: Nginx, Node.js, PostgreSQL, OS, WAF → Loki + Grafana.
+
+Alertas: falhas de login, ataques WAF, erros críticos, falhas de backup.
+
+KPIs: MTTD, MTTR, ataques bloqueados, % de logs integrados.
+---
+
+## 5. Resposta a Incidentes
+
+Fluxo padrão: Detecção → Contenção → Erradicação → Recuperação → Lições Aprendidas.
+Runbooks mínimos: SQLi, XSS, brute-force e indisponibilidade.
+
+---
+
+## 6. Recomendações (80/20)
+
+30 dias: implementar WAF + rate limit, centralizar logs, testar backups, criar runbooks.
+
+90 dias: MFA dev/ops, hardening automatizado, dashboards, playbooks expandidos.
+
+180 dias: gestão de segredos, WAF customizado, treinamento em IR.
+
+Responsáveis:
+
+Devs → código seguro, ORM, MFA.
+
+Ops → hardening, logs, backup.
+
+Consultoria → SIEM, runbooks.
+
+---
+
+## 7. Riscos, Custos e Assunções
+
+Riscos: equipe pequena, orçamento restrito.
+
+Custos: open-source (Loki/Grafana, Fail2ban), Cloudflare WAF (~$20/mês).
+
+Assunções: IaaS suporta logs/regras; time com acesso root/admin e Linux básico.
+
+---
+
+## 8. Conclusão
+
+Adoção do plano = mais resiliência, visibilidade e resposta rápida.
+
+Próximos Passos: validar escopo, aplicar quick wins, rodar testes IR.
+
+Critérios de Sucesso:
+
+Menos incidentes críticos.
+
+100% cobertura de logs.
+
+MTTR < 4h.
+
+Runbooks executados com sucesso.
