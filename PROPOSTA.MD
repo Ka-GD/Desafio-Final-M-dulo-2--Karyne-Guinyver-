@@ -19,7 +19,8 @@ Objetivo: reduzir riscos críticos com defesa em camadas, monitoramento centrali
 - **Aplicação:** sanitização inputs, ORM seguro, painel admin com MFA.  
 - **Dados:** TLS, criptografia em disco/db, backups criptografados e testados.  
 - **Identidade:** gestão de segredos (Vault/Secret Manager), menor privilégio.  
-mermaid
+
+```mermaid
 flowchart LR
   Internet --> WAF[WAF/CRS]
   WAF --> LB[Load Balancer]
@@ -27,6 +28,7 @@ flowchart LR
   APP --> DB[(PostgreSQL)]
   SIEM[Coleta/Correlação] -->|Logs| APP & DB
   IAM[Gestão de Identidade] --> APP
+
 
 ## 4. Monitoramento & SIEM
 - Coleta logs (Nginx, Node.js, PostgreSQL, OS, WAF) → Loki + Grafana.  
